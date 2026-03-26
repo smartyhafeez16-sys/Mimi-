@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Mimi ❤️</title>
+
 <style>
 body {
   margin: 0;
@@ -11,6 +12,7 @@ body {
   background: radial-gradient(circle at top, #ff9a9e, #fad0c4);
   overflow: hidden;
   text-align: center;
+  transition: opacity 1s ease;
 }
 
 h1 {
@@ -18,6 +20,7 @@ h1 {
   color: white;
   font-size: 3rem;
   text-shadow: 0 0 15px rgba(255,255,255,0.8);
+  transition: opacity 1s ease;
 }
 
 img {
@@ -25,6 +28,7 @@ img {
   border-radius: 20px;
   margin-top: 20px;
   box-shadow: 0 0 25px rgba(255, 105, 180, 0.7);
+  transition: opacity 1s ease;
 }
 
 button {
@@ -34,7 +38,7 @@ button {
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s, opacity 1s ease;
 }
 
 #yesBtn {
@@ -66,6 +70,29 @@ button:hover {
   to { opacity: 1; }
 }
 
+/* FULLSCREEN VIDEO */
+#videoContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#videoContainer video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* HEARTS */
 .heart {
   position: absolute;
   width: 20px;
@@ -88,6 +115,7 @@ button:hover {
   100% { transform: translateY(-800px) rotate(45deg); opacity: 0; }
 }
 
+/* FIREWORKS */
 .firework {
   position: absolute;
   width: 5px;
@@ -103,9 +131,9 @@ button:hover {
     opacity: 0;
   }
 }
-
 </style>
 </head>
+
 <body>
 
 <audio id="music" autoplay loop>
@@ -127,10 +155,20 @@ button:hover {
   I am truly lucky to have you in my life 💖
 </div>
 
+<!-- FULLSCREEN VIDEO -->
+<div id="videoContainer">
+  <video id="myVideo" autoplay>
+    <source src="pehli-nazar-mein.mp4" type="video/mp4">
+  </video>
+</div>
+
 <script>
 const noBtn = document.getElementById('noBtn');
 const yesBtn = document.getElementById('yesBtn');
 const message = document.getElementById('message');
+const videoContainer = document.getElementById('videoContainer');
+const video = document.getElementById('myVideo');
+const music = document.getElementById('music');
 
 noBtn.addEventListener('mouseover', () => {
   const x = Math.random() * window.innerWidth;
@@ -145,9 +183,27 @@ noBtn.addEventListener('click', () => {
 
 yesBtn.addEventListener('click', () => {
   message.style.display = 'block';
+
   createHearts();
   createFireworks();
-  alert("You just made me the happiest 💖");
+
+  // Stop background music
+  music.pause();
+
+  // Show video smoothly
+  videoContainer.style.display = 'flex';
+
+  setTimeout(() => {
+    videoContainer.style.opacity = '1';
+  }, 100);
+
+  video.play();
+
+  // Fade out everything
+  document.querySelector('h1').style.opacity = '0';
+  document.querySelector('img').style.opacity = '0';
+  yesBtn.style.opacity = '0';
+  noBtn.style.opacity = '0';
 });
 
 function createHearts() {
@@ -155,24 +211,8 @@ function createHearts() {
     const heart = document.createElement('div');
     heart.classList.add('heart');
     heart.style.left = Math.random() * 100 + 'vw';
-    const color = randomColor();
-    heart.style.background = color;
-    heart.style.setProperty('--c', color);
-    heart.innerHTML = '';
+    heart.style.background = randomColor();
     document.body.appendChild(heart);
-
-    heart.style.background = color;
-    heart.style.setProperty('--c', color);
-
-    heart.style.boxShadow = `0 0 10px ${color}`;
-
-    heart.style.setProperty('--x', '0px');
-    heart.style.setProperty('--y', '-800px');
-
-    heart.style.background = color;
-
-    heart.style.setProperty('--c', color);
-
     setTimeout(() => heart.remove(), 5000);
   }, 300);
 }
@@ -191,7 +231,6 @@ function createFireworks() {
       fw.style.setProperty('--y', Math.sin(angle) * distance + 'px');
 
       fw.style.background = randomColor();
-
       document.body.appendChild(fw);
       setTimeout(() => fw.remove(), 1000);
     }
