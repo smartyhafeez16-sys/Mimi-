@@ -12,7 +12,6 @@ body {
   background: radial-gradient(circle at top, #ff9a9e, #fad0c4);
   overflow: hidden;
   text-align: center;
-  transition: opacity 1s ease;
 }
 
 h1 {
@@ -62,7 +61,16 @@ button:hover {
   color: white;
   font-size: 2rem;
   margin-top: 40px;
-  animation: fadeIn 2s ease-in-out;
+}
+
+/* NEW TEXT */
+#extraText {
+  display: none;
+  color: white;
+  font-size: 2.2rem;
+  margin-top: 20px;
+  font-weight: bold;
+  animation: fadeIn 2s ease;
 }
 
 @keyframes fadeIn {
@@ -70,7 +78,7 @@ button:hover {
   to { opacity: 1; }
 }
 
-/* FULLSCREEN VIDEO */
+/* VIDEO CONTAINER */
 #videoContainer {
   position: fixed;
   top: 0;
@@ -86,10 +94,12 @@ button:hover {
   transition: opacity 1s ease;
 }
 
+/* INSTAGRAM RATIO (9:16) */
 #videoContainer video {
-  width: 100%;
-  height: 100%;
+  height: 90%;
+  aspect-ratio: 9/16;
   object-fit: cover;
+  border-radius: 20px;
 }
 
 /* HEARTS */
@@ -155,7 +165,11 @@ button:hover {
   I am truly lucky to have you in my life 💖
 </div>
 
-<!-- FULLSCREEN VIDEO -->
+<div id="extraText">
+  Yes you are prettiest of all time 💖
+</div>
+
+<!-- VIDEO -->
 <div id="videoContainer">
   <video id="myVideo" autoplay>
     <source src="pehli-nazar-mein.mp4" type="video/mp4">
@@ -166,6 +180,7 @@ button:hover {
 const noBtn = document.getElementById('noBtn');
 const yesBtn = document.getElementById('yesBtn');
 const message = document.getElementById('message');
+const extraText = document.getElementById('extraText');
 const videoContainer = document.getElementById('videoContainer');
 const video = document.getElementById('myVideo');
 const music = document.getElementById('music');
@@ -183,27 +198,29 @@ noBtn.addEventListener('click', () => {
 
 yesBtn.addEventListener('click', () => {
   message.style.display = 'block';
+  extraText.style.display = 'block';
 
   createHearts();
   createFireworks();
 
-  // Stop background music
   music.pause();
 
-  // Show video smoothly
-  videoContainer.style.display = 'flex';
-
+  // delay before video (romantic pause 😏)
   setTimeout(() => {
-    videoContainer.style.opacity = '1';
-  }, 100);
+    videoContainer.style.display = 'flex';
 
-  video.play();
+    setTimeout(() => {
+      videoContainer.style.opacity = '1';
+    }, 100);
 
-  // Fade out everything
-  document.querySelector('h1').style.opacity = '0';
-  document.querySelector('img').style.opacity = '0';
-  yesBtn.style.opacity = '0';
-  noBtn.style.opacity = '0';
+    video.play();
+
+    document.querySelector('h1').style.opacity = '0';
+    document.querySelector('img').style.opacity = '0';
+    yesBtn.style.opacity = '0';
+    noBtn.style.opacity = '0';
+
+  }, 2000);
 });
 
 function createHearts() {
